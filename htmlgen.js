@@ -31,43 +31,53 @@ var attrParser = function(str){
     return attrs;
 };
 
-
-var ADDELEMFUNC = function(nname,inner,attr,style){
-    if(nname.add === ADDELEMFUNC){//it's an object
-        this.e.appendChild(nname.e);
+var getELEM = function(nname,attrs,inner,style){
+    if(typeof nname === "object" && "mtvriiutba" in nname){//it's an ELEM
         return nname;
-    }else{//it's a string or element, which will be taken care of by ELEM
-        var eelem = new ELEM(nname,inner,attr,style);
-        this.e.appendChild(eelem.e);
-        return eelem;
+    }else{
+        return new ELEM(nname,attrs,inner,style);
     }
 };
 
-var ADDATTRFUNC = function(a,b){
-    this.e.setAttribute(a,b);
-};
-
-
-var ELEM = function(nname,inner,attr,style){
+//will be a version 2 overhaul, so everything will be different
+var ELEM = function(nname,attrs,inner,style){
     if(typeof nname === "string"){
         var e = document.createElement(nname);
-        if(inner)e.innerHTML = inner;
-        if(attr){
-            attrParser(attr).map((a)=>{
+        if(attrs){
+            attrParser(attrs).map((a)=>{
                 e.setAttribute(a[0],a[1]);
             });
         }
-        if(style)e.style = style;
+        if(inner){
+            e.innerHTML = inner;
+        }
+        if(style){
+            e.style = style;
+        }
         this.e = e;
-    }else{//nname is an element
+    }else{
         this.e = nname;
     }
-    this.add = ADDELEMFUNC;
-    this.attr = ADDATTRFUNC;
-};
+    this.mtvriiutba = 42;
+    
+    this.add = function(nname,attrs,inner,style){
+        var elem = getELEM(nname,attrs,inner,style);
+        this.e.appendChild(elem.e);
+        return elem;
+    };
+    this.attr = function(a,b){
+        this.e.setAttribute(a,b);
+    };
+    this.remove = function(){
+        this.e.parentNode.removeChild(this.e);
+    };
+    var that = this;
+    Object.defineProperties(this, {
+        "children": {
+             "get": ()=>that.e.children,
+             "set": ()=>{}
+        }
+    });
+}
 
-var BODY = (new function(){
-    this.e = document.body;
-    this.add = ADDELEMFUNC;
-    this.attr = ADDATTRFUNC;
-}());
+var BODY = new ELEM(document.body);

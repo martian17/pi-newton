@@ -1,3 +1,4 @@
+var field = BODY.add("div");
 var canvas = BODY.add("canvas").e;
 
 var pause = function(t){
@@ -58,20 +59,70 @@ var context = {
     fontFamily:"Arial"
 };
 
+var AnimationContext = function(field){
+    this.fontSize = 4*vw;
+    this.fontFamily = "Arial";
+    this.appearance = "one-by-one";
+    this.delay = 100;//100ms
+    var that = this;
+    
+    var queue = [];
+    var popQueue = function(){
+        var q = queue[0];
+        queue = queue.splice(1);
+        return q;
+    };
+    this.sub = function(x,y,content){
+        if(queue.length === 0){
+            executionLoop();
+        }
+        queue.push([x,y,content]);
+    };
+    var executionLoop = function(){
+        if(queue.length === 0){
+            return false;
+        }
+        var [x,y,content] = popQueue();
+        executeSub(x,y,content);
+        setTimeout(executionLoop,that.delay);
+    };
+    
+    var executeSub = function(x,y,content){
+        field.add("div",false,"class:sub");
+        if(that.appearance === "one-by-one"){
+            field
+        }else if(that.appearance === "fade-in"){
+            
+        }
+    };
+    
+    
+    this.wait = function(){
+        
+    }
+};
+
+var ct = new AnimationContext(field);
+
+
 var main = async function(){
     //first do the taytay's series
-    context.fontSize = 4*vw;
-    sub(0,0,"First use the Taylor series around x=0 to approximate sin");
-    context.style = "fade-in"
-    sub(0,5 *vw,"sin(x) = sin(x)");
-    sub(0,10*vw,"sin'(x) = cos(x)");
-    sub(0,15*vw,"sin''(x) = -sin(x)");
-    sub(0,20*vw,"sin'''(x) = -cos(x)");
-    sub(0,25*vw,"sin''''(x) = sin(x)");
+    ct.appearance = "one-by-one";
+    ct.fontSize = 4*vw;sin''''(0) = 0
+    ct.sub(0,0,"First use the Taylor series around x=0 to approximate sin");
+    ct.appearance = "fade-in";
+    ct.delay = 100;//100ms
+    ct.sub(0,5 *vw,"sin(x) = sin(x)");
+    ct.sub(0,10*vw,"sin'(x) = cos(x)");
+    ct.sub(0,15*vw,"sin''(x) = -sin(x)");
+    ct.sub(0,20*vw,"sin'''(x) = -cos(x)");
+    ct.sub(0,25*vw,"sin''''(x) = sin(x)");
     
-    sub(40*vw,5 *vw,"sin(0) = 0");
-    sub(40*vw,10*vw,"sin'(0) = 1");
-    sub(40*vw,15*vw,"sin''(0) = 0");
-    sub(40*vw,20*vw,"sin'''(0) = -1");
-    sub(40*vw,25*vw,"sin''''(0) = 0");
+    ct.sub(40*vw,5 *vw,"sin(0) = 0");
+    ct.sub(40*vw,10*vw,"sin'(0) = 1");
+    ct.sub(40*vw,15*vw,"sin''(0) = 0");
+    ct.sub(40*vw,20*vw,"sin'''(0) = -1");
+    ct.sub(40*vw,25*vw,"sin''''(0) = 0");
+    await ct.wait();
+    
 }
