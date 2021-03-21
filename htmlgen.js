@@ -69,7 +69,9 @@ var ELEM = function(nname,attrs,inner,style){
         this.e.setAttribute(a,b);
     };
     this.remove = function(){
-        this.e.parentNode.removeChild(this.e);
+        if(this.e.parentNode && this.e.parentNode.removeChild){
+            this.e.parentNode.removeChild(this.e);
+        }
     };
     var that = this;
     Object.defineProperties(this, {

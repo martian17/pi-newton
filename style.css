@@ -1,3 +1,66 @@
 body{
     margin:0px;
 }
+
+.sub{
+    position:absolute;
+}
+
+.one-by-one{
+    animation: fadeIn ease 1s;
+    transform:translateX(0em);
+    opacity:1;
+    display:inline-block;
+    min-width:0.3em;
+}
+
+@keyframes fadeIn {
+    0% {opacity:0;transform:translateX(1em);}
+    100% {opacity:1;transform:translateX(0em);}
+}
+
+.power, .power div, .divide, .divide div{
+    display:inline-block;
+}
+
+.power{
+    position:relative;
+}
+
+.power>div:nth-child(1){
+    
+}
+
+.power>div:nth-child(2){
+    position:absolute;
+    font-size:0.5em;
+    top:0em;
+    right:-0.7em;
+}
+
+.divide{
+    position:relative;
+    padding: 0em 0.2em;
+}
+
+.divide>div:nth-child(1){
+    position:absolute;
+    top:-0.5em;
+    left:0.3em;
+}
+
+.divide>div:nth-child(2){
+    transform:translateY(0.64em);
+    border-top:0.1em solid #000;
+}
+
+.fade-out{
+    animation: fadeOut ease 1s;
+    transform:translateX(-1em);
+    opacity:0;
+}
+
+@keyframes fadeOut {
+    0% {opacity:1;transform:translateX(0em);}
+    100% {opacity:0;transform:translateX(-1em);}
+}
